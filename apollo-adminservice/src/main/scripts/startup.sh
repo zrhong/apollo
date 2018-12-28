@@ -1,9 +1,19 @@
 #!/bin/bash
-SERVICE_NAME=apollo-adminservice
+
+apollo_config_db_url=jdbc:mysql://localhost:3306/ApolloConfigDBFat?characterEncoding=utf8
+apollo_config_db_username=root
+apollo_config_db_password=root
+
+# meta server url
+config_server_url=http://127.0.0.1:3081
+admin_server_url=http://127.0.0.1:8091
+eureka_service_url=$config_server_url/eureka/
+
+SERVICE_NAME=apollo-adminservice-1.3.0-SNAPSHOT
 ## Adjust log dir if necessary
 LOG_DIR=/opt/logs/100003172
 ## Adjust server port if necessary
-SERVER_PORT=8090
+SERVER_PORT=8091
 
 ## Adjust memory settings if necessary
 #export JAVA_OPTS="-Xms2560m -Xmx2560m -Xss256k -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=384m -XX:NewSize=1536m -XX:MaxNewSize=1536m -XX:SurvivorRatio=8"
@@ -12,10 +22,13 @@ SERVER_PORT=8090
 #export JAVA_OPTS="$JAVA_OPTS -server -XX:-ReduceInitialCardMarks"
 
 ########### The following is the same for configservice, adminservice, portal ###########
-export JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:ParallelGCThreads=4 -XX:MaxTenuringThreshold=9 -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseCMSInitiatingOccupancyOnly -XX:+ScavengeBeforeFullGC -XX:+UseCMSCompactAtFullCollection -XX:+CMSParallelRemarkEnabled -XX:CMSFullGCsBeforeCompaction=9 -XX:CMSInitiatingOccupancyFraction=60 -XX:+CMSClassUnloadingEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSPermGenSweepingEnabled -XX:CMSInitiatingPermOccupancyFraction=70 -XX:+ExplicitGCInvokesConcurrent -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationConcurrentTime -XX:+PrintHeapAtGC -XX:+UseGCLogFileRotation -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow -Duser.timezone=Asia/Shanghai -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom"
-export JAVA_OPTS="$JAVA_OPTS -Dserver.port=$SERVER_PORT -Dlogging.file=$LOG_DIR/$SERVICE_NAME.log -Xloggc:$LOG_DIR/gc.log -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=5M -XX:HeapDumpPath=$LOG_DIR/HeapDumpOnOutOfMemoryError/"
+#JAVA OPTS
+BASE_JAVA_OPTS="-Denv=fat -Dfat_meta=$config_server_url"
+ADMIN_JAVA_OPTS="$BASE_JAVA_OPTS -Dspring.profiles.active=github -Deureka.service.url=$eureka_service_url -Deureka.instance.homePageUrl=$admin_server_url"
+JAVA_OPTS="$ADMIN_JAVA_OPTS -Dspring.datasource.url=$apollo_config_db_url -Dspring.datasource.username=$apollo_config_db_username -Dspring.datasource.password=$apollo_config_db_password"
+export JAVA_OPTS="$JAVA_OPTS -Dserver.port=$SERVER_PORT -Dlogging.file=$LOG_DIR/$SERVICE_NAME.log -Xloggc:$LOG_DIR/heap_trace.txt -XX:HeapDumpPath=$LOG_DIR/HeapDumpOnOutOfMemoryError/"
 
-PATH_TO_JAR=$SERVICE_NAME".jar"
+PATH_TO_JAR="/d/ideaworkspace/apollo/apollo/apollo-adminservice/target/"$SERVICE_NAME".jar"
 SERVER_URL="http://localhost:$SERVER_PORT"
 
 function checkPidAlive {
