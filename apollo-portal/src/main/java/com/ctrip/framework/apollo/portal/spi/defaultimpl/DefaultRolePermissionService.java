@@ -13,20 +13,13 @@ import com.ctrip.framework.apollo.portal.repository.RoleRepository;
 import com.ctrip.framework.apollo.portal.repository.UserRoleRepository;
 import com.ctrip.framework.apollo.portal.service.RolePermissionService;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.google.common.collect.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by timothy on 2017/4/26.
@@ -85,18 +78,19 @@ public class DefaultRolePermissionService implements RolePermissionService {
         List<UserRole> existedUserRoles =
                 userRoleRepository.findByUserIdInAndRoleId(userIds, role.getId());
         Set<String> existedUserIds =
-                FluentIterable.from(existedUserRoles).transform(userRole -> userRole.getUserId()).toSet();
+                existedUserRoles.stream().map(UserRole::getUserId).collect(Collectors.toSet());
+//                FluentIterable.from(existedUserRoles).transform(userRole -> userRole.getUserId()).toSet();
 
         Set<String> toAssignUserIds = Sets.difference(userIds, existedUserIds);
 
-        Iterable<UserRole> toCreate = FluentIterable.from(toAssignUserIds).transform(userId -> {
+        Iterable<UserRole> toCreate = toAssignUserIds.stream().map(userId -> {
             UserRole userRole = new UserRole();
             userRole.setRoleId(role.getId());
             userRole.setUserId(userId);
             userRole.setDataChangeCreatedBy(operatorUserId);
             userRole.setDataChangeLastModifiedBy(operatorUserId);
             return userRole;
-        });
+        }).collect(Collectors.toList());
 
         userRoleRepository.saveAll(toCreate);
         return toAssignUserIds;

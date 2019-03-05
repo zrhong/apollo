@@ -6,7 +6,7 @@ apollo_portal_db_password=root
 
 # meta server url
 dev_config_server_url=http://127.0.0.1:8080
-fat_config_server_url=http://127.0.0.1:3081
+fat_config_server_url=http://127.0.0.1:8092
 #uat_config_server_url=http://127.0.0.1:8080
 
 ## Adjust server port if necessary

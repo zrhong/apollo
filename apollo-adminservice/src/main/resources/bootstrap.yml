@@ -6,7 +6,7 @@ eureka:
     health-check-url-path: /health
   client:
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:8080/eureka/
+      defaultZone: http://${eureka.instance.hostname}:8091/eureka/
     healthcheck:
       enabled: true
     eurekaServiceUrlPollIntervalSeconds: 60
@@ -14,4 +14,24 @@ eureka:
 management:
   health:
     status:
-      order: DOWN, OUT_OF_SERVICE, UNKNOWN, UP 
+      order: DOWN, OUT_OF_SERVICE, UNKNOWN, UP
+
+
+spring:
+  application:
+    name: apollo-adminservice
+#  profiles:
+#      active: github
+  datasource:
+    url: jdbc:mysql://localhost:3306/ApolloConfigDB?autoReconnect=true&failOverReadOnly=false&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+ctrip:
+     appid: 100003171
+server:
+        port: 8092
+logging:
+        file: /opt/logs/100003171/apollo-configservice.log
+env: dev
+dev_meta: http://127.0.0.1:8091

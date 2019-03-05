@@ -68,10 +68,28 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
-					<executable>true</executable>
+					<archive>
+						<!-- 生成MANIFEST.MF的设置 -->
+						<manifest>
+							<!-- 为依赖包添加路径, 这些路径会写在MANIFEST文件的Class-Path下 -->
+							<addClasspath>true</addClasspath>
+							<!--<classpathPrefix></classpathPrefix> -->
+							<!-- jar启动入口类 -->
+							<mainClass>com.ctrip.framework.apollo.adminservice.AdminServiceApplication</mainClass>
+						</manifest>
+						<manifestEntries>
+							<!-- 在Class-Path下添加配置文件的路径 -->
+							<Class-Path>config/</Class-Path>
+						</manifestEntries>
+					</archive>
+
+					<includes>
+						<!-- 打jar包时，只打包class文件 -->
+						<include>**/*.class</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -99,10 +117,10 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>${project.artifactId}-${project.version}-${package.environment}</finalName>
+							<!--<finalName>${project.artifactId}-${project.version}-${package.environment}</finalName>-->
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
-								<descriptor>src/assembly/assembly-descriptor.xml</descriptor>
+								<descriptor>src/main/assemble/assembly.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>

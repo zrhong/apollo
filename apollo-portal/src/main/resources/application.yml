@@ -1,20 +1,24 @@
-spring:
-  application:
-    name: apollo-portal
-  profiles:
-    active: ${apollo_profile}
-
 server:
-  port: 8080
+  port: 8093
   compression:
     enabled: true
   
-logging:
-  file: /opt/logs/100003173/apollo-portal.log
-
 management:
   health:
     status:
-      order: DOWN, OUT_OF_SERVICE, UNKNOWN, UP 
+      order: DOWN, OUT_OF_SERVICE, UNKNOWN, UP
 
-
+spring:
+  application:
+    name: apollo-portal
+  datasource:
+    url: jdbc:mysql://localhost:3306/ApolloPortalDB?autoReconnect=true&failOverReadOnly=false&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+ctrip:
+     appid: 100003173
+logging:
+        file: /opt/logs/100003171/apollo-configservice.log
+env: dev
+#dev_meta: http://127.0.0.1:8091

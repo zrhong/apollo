@@ -94,17 +94,17 @@
 	</properties>
 
 	<modules>
-		<module>apollo-buildtools</module>
+		<!--<module>apollo-buildtools</module>-->
 		<module>apollo-core</module>
-		<module>apollo-client</module>
+		<!--<module>apollo-client</module>-->
 		<module>apollo-common</module>
 		<module>apollo-biz</module>
 		<module>apollo-configservice</module>
 		<module>apollo-adminservice</module>
 		<module>apollo-portal</module>
-		<module>apollo-assembly</module>
-		<module>apollo-demo</module>
-		<module>apollo-mockserver</module>
+		<!--<module>apollo-assembly</module>-->
+		<!--<module>apollo-demo</module>-->
+		<!--<module>apollo-mockserver</module>-->
 		<module>apollo-openapi</module>
 	</modules>
 
@@ -357,19 +357,19 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven-surefire-plugin.version}</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>${maven-source-plugin.version}</version>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<goals>
-								<goal>jar-no-fork</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+				<!--<plugin>-->
+					<!--<groupId>org.apache.maven.plugins</groupId>-->
+					<!--<artifactId>maven-source-plugin</artifactId>-->
+					<!--<version>${maven-source-plugin.version}</version>-->
+					<!--<executions>-->
+						<!--<execution>-->
+							<!--<id>attach-sources</id>-->
+							<!--<goals>-->
+								<!--<goal>jar-no-fork</goal>-->
+							<!--</goals>-->
+						<!--</execution>-->
+					<!--</executions>-->
+				<!--</plugin>-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
